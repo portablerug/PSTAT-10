@@ -68,7 +68,7 @@ dbinom(x=3, size=10, prob=0.034)
 # based on an average rate of success
 
 #EX1: 
-# 
+#
 
 
 
