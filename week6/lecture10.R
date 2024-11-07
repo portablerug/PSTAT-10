@@ -121,29 +121,4 @@ qqline(rvariates, col='red')
 
 #-------------------------------------------------------------------------------------------------------
 # Demo 6
-# Supose the mean checkout time of Store casheir is 3 minutes
-# Find the probability of a customer checkout being copleted by the cashier
-# in less than two minutes
-
-# pexp(q, rate=, lower.tail=TRUE, log.p=FALSE)
-# lower.tail is the default. Probs less than x
-# lower.tail=F. Probs greater than x
- pexp(2, rate=1/3, lower.tail=TRUE)
-
-# Suppose the mean number of minutes between eruptions for a certain geyser is 40 minutes.
-# What is the probability that we’ll have to wait less than 50 minutes for an eruption?
-pexp(50, rate=1/40)
-
-#-------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
+# Sup
