@@ -44,10 +44,15 @@ while(i <= 17){
 17 %% 5
 17 %/% 5   
 floor(17/5)  # The largest integer that is smaller than 17/5
-ceiling(17/5) # The smallest ineger that is larger than 17/5
+ceiling(17/5) # The smallest integer that is larger than 17/5
 
+#-------------------------------------------------------------------------------------------
+getwd()
+setwd("~/Documents/PSTAT10/PSTAT-10/week7/tinyclothes")
+getwd()
 
-
+# assuming current working directory
+CUSTOMER <- read.csv("CUSTOMER.txt")
 
 
 
