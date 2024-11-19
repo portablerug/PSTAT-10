@@ -112,10 +112,16 @@ dbGetQuery(PSTAT10db, 'SELECT * FROM EMPLOYEE WHERE NOT (NAME="SMITH") AND
 
 #-------------------------------------------------------------------------------------------
 # Demo 7
-# What is the average number of items currently ordered? 
+# Retrieve the dtials of all employees whos age is between 21 and 31
+dbGetQuery(PSTAT10db, 'SELECT * FROM EMPLOYEE WHERE (AGE BETWEEN 21 AND 31)')
 
+# Retrieve the details of all employees whos age is not 21. Three equivalent queries.
+dbGetQuery(PSTAT10db, 'SELECT * FROM EMPLOYEE WHERE (AGE !=21)')
+dbGetQuery(PSTAT10db, "SELECT *FROM EMPLOYEE WHERE AGE !=21")
+dbGetQuery(PSTAT10db, 'SELECT *FROM EMPLOYEE WHERE AGE !=21')
 
-
+#-------------------------------------------------------------------------------------------
+# Demo 8
 
 
 

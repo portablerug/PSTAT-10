@@ -57,3 +57,10 @@ CUSTOMER <- read.csv("CUSTOMER.txt")
 
 
 
+
+
+
+
+
+
+
