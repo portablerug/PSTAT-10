@@ -20,19 +20,59 @@ EMPLOYEE_PHONE <- read.csv("~/Documents/PSTAT10/PSTAT-10/week9/tinyclothes/EMPLO
 # blah blah blah
 
 dbWriteTable(PSTAT10db, "INVOICES", INVOICES, overwrite=TRUE)
-dbWriteTable(PSTAT10db, "PRODUCT", PRODUCT)
-dbWriteTable(PSTAT10db, "STOCK TOTAL", STOCK_TOTAL)
-dbWriteTable(PSTAT10db, "SALES_ORDER", SALES_ORDER)
-dbWriteTable(PSTAT10db, "SALES_ORDER_LINE", SALES_ORDER_LINE)
-dbWriteTable(PSTAT10db, "EMPLOYEE_PHONE", EMPLOYEE_PHONE)
+dbWriteTable(PSTAT10db, "PRODUCT", PRODUCT, overwrite=T)
+dbWriteTable(PSTAT10db, "STOCK TOTAL", STOCK_TOTAL, overwrite=T)
+dbWriteTable(PSTAT10db, "SALES_ORDER", SALES_ORDER, overwrite=T)
+dbWriteTable(PSTAT10db, "SALES_ORDER_LINE", SALES_ORDER_LINE, overwrite=T)
+dbWriteTable(PSTAT10db, "EMPLOYEE_PHONE", EMPLOYEE_PHONE, overwrite=T)
 
 #-----------------------------------------------------------------------------------------
 # Demo 1: Group By
 # How many items are there in each order? Use INVOICES
-dbGetQuery(PSTATdb, 'SELECT *FROM INVOICES')
+dbGetQuery(PSTATdb, 'SELECT *FROM INVOICES') # Retrieves all rows and columns (*) in INVOICES
 
 # How many items are in each order?
 dbGetQuery(PSTAT10db, 'SELECT ORDER_NO, SUM(QUANTITY) FROM INVOICES
            GROUP BY ORDER_NO')
+
+# Which ORDERS are invoiced for a quantity of 20 000 or more items?
+dbGetQuery(PSTAT10db, 'SELECT ORDER_NO, SUM(QUANTITY) FROM INVOICES
+           GROUP BY ORDER_NO
+           HAVING SUM(QUANTITY)>20000')
+
+#-----------------------------------------------------------------------------------------
+# Demo 2: Ordering
+# Select all from product and order by NAME
+dbGetQuery(PSTAT10db, 'SELECT *FROM PRODUCT')
+dbGetQuery(PSTAT10db, 'SELECT *FROM PRODUCT
+           ORDER BY NAME')
+
+# Attributes are referred to by their numerical position
+dbGetQuery(PSTAT10db, 'select *from product')
+dbGetQuery(PSTAT10db, 'select *from product order by prod_no desc')
+dbGetQuery(PSTAT10db, 'select *from product order by 1 desc')
+
+# Change the order in which the attributes are returned
+# Ordering by first attribute
+dbGetQuery(PSTAT10db, 'select *from product')
+dbGetQuery(PSTAT10db, 'select name, prod_no, color from product order by
+           1 desc')
+#-----------------------------------------------------------------------------------------
+# Demo 3
+# ORDER BY attribute that has the same value twice
+dbGetQuery(PSTAT10db, 'select age, dept_no from employee')
+
+# NOTICE: D1 occurs twice
+dbGetQuery(PSTAT10db, 'select age, dept_no from employee order by 2 desc')
+
+
+# Order both attributes
+dbGetQuery(PSTAT10db, 'select age, dept_no from employee order by 2 desc, 1 desc')
+#-----------------------------------------------------------------------------------------
+
+
+
+
+
 
 
