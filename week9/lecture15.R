@@ -9,7 +9,8 @@ dbListTables(PSTAT10db)
 # Change directory
 getwd()
 setwd("/Users/eva-01/Documents/PSTAT10/PSTAT-10/week9/tinyclothes")
-
+PSTAT10db <- dbConnect(RSQLite::SQLite(), "PSTAT10-db.sqlite")
+dbListTables(PSTAT10db)
 # Read files
 INVOICES <- read.csv("~/Documents/PSTAT10/PSTAT-10/week9/tinyclothes/INVOICES.txt")
 PRODUCT <- read.csv("~/Documents/PSTAT10/PSTAT-10/week9/tinyclothes/PRODUCT.txt")
@@ -26,10 +27,11 @@ dbWriteTable(PSTAT10db, "SALES_ORDER", SALES_ORDER, overwrite=T)
 dbWriteTable(PSTAT10db, "SALES_ORDER_LINE", SALES_ORDER_LINE, overwrite=T)
 dbWriteTable(PSTAT10db, "EMPLOYEE_PHONE", EMPLOYEE_PHONE, overwrite=T)
 
+dbIsValid(PSTAT10db)
 #-----------------------------------------------------------------------------------------
 # Demo 1: Group By
 # How many items are there in each order? Use INVOICES
-dbGetQuery(PSTATdb, 'SELECT *FROM INVOICES') # Retrieves all rows and columns (*) in INVOICES
+dbGetQuery(PSTAT10db, 'SELECT *FROM INVOICES') # Retrieves all rows and columns (*) in INVOICES
 
 # How many items are in each order?
 dbGetQuery(PSTAT10db, 'SELECT ORDER_NO, SUM(QUANTITY) FROM INVOICES
@@ -59,20 +61,58 @@ dbGetQuery(PSTAT10db, 'select name, prod_no, color from product order by
            1 desc')
 #-----------------------------------------------------------------------------------------
 # Demo 3
+#-----------------------------------------------------------------------------------------
+dbListTables(PSTAT10db)
 # ORDER BY attribute that has the same value twice
-dbGetQuery(PSTAT10db, 'select age, dept_no from employee')
+dbGetQuery(PSTAT10db, 'select age, dept_no from EMPLOYEE')
 
 # NOTICE: D1 occurs twice
+# order by (COLUMN 2) descending. dept_no
 dbGetQuery(PSTAT10db, 'select age, dept_no from employee order by 2 desc')
-
 
 # Order both attributes
 dbGetQuery(PSTAT10db, 'select age, dept_no from employee order by 2 desc, 1 desc')
 #-----------------------------------------------------------------------------------------
+# Demo 4 JOIN or INNER JOIN
+#-----------------------------------------------------------------------------------------
+# BOTH RELATIONS HAVE CUST_NO
+dbGetQuery(PSTAT10db, 'select *from CUSTOMER')
+dbGetQuery(PSTAT10db, 'select *from SALES_ORDER')
 
+# Case 1: JOIN or INNER JOIN without conditions return a Cartesian product
+dbGetQuery(PSTAT10db, 'select *from CUSTOMER join SALES_ORDER')
+dbGetQuery(PSTAT10db, 'select *from CUSTOMER inner join SALES_ORDER')
 
+# Case 2: WITH conditions
+dbGetQuery(PSTAT10db, 'select *from CUSTOMER inner join SALES_ORDER
+           where CUSTOMER.CUST_NO = SALES_ORDER.CUST_NO')
+dbGetQuery(PSTAT10db, 'select *from CUSTOMER join SALES_ORDER
+           where CUSTOMER.CUST_NO=SALES_ORDER.CUST_NO')
 
+#-----------------------------------------------------------------------------------------
+# Demo 5: Left Joins
+#-----------------------------------------------------------------------------------------
+dbGetQuery(PSTAT10db, 'select *from SALES_ORDER_LINE')
+dbGetQuery(PSTAT10db, 'select *from PRODUCT')
+dbGetQuery(PSTAT10db, 'select *from SALES_ORDER_LINE
+           left join PRODUCT')
+dbGetQuery(PSTAT10db, 'select *from SALES_ORDER_LINE
+           left join PRODUCT where SALES_ORDER_LINE.PROD_NO = PRODUCT.PROD_NO')
 
+# Order of relations matters
+dbGetQuery(PSTAT10db, 'select *from PRODUCT left join SALES_ORDER_LINE 
+           where SALES_ORDER_LINE.PROD_NO = PRODUCT.PROD_NO')
+#-----------------------------------------------------------------------------------------
+# Demo 5: Right Joins
+#-----------------------------------------------------------------------------------------
+dbGetQuery(PSTAT10db, 'select *from SALES_ORDER_LINE right join PRODUCT')
+dbGetQuery(PSTAT10db, 'select *from SALES_ORDER_LINE right join PRODUCT
+           where SALES_ORDER_LINE.PROD_NO = PRODUCT.PROD_NO')
+
+dbGetQuery(PSTAT10db, 'select *from SALES_ORDER')
+dbGetQuery(PSTAT10db, 'select *from INVOICES')
+dbGetQuery(PSTAT10db, 'select INVOICES.QUANTITY,INVOICES.ORDER_NO, SALES_ORDER.DATE
+           from INVOICES right join SALES_ORDER on SALES_ORDER.ORDER_NO = INVOICES.ORDER_NO')
 
 
 
